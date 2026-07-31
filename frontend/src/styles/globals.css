@@ -89,6 +89,7 @@ main {
 }
 
 .site-header {
+    position: sticky;
     height: 84px;
     display: flex;
     align-items: center;
@@ -98,7 +99,6 @@ main {
     position: sticky;
     top: 0;
     z-index: 10;
-    /* background: rgba(247, 243, 235, .94) */
     background: #f7f3eb
 }
 
