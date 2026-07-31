@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
-    "build": "npm --prefix frontend ci && npm --prefix frontend run build"
+    "build": "npm --prefix frontend install --no-audit --no-fund && npm --prefix frontend run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
