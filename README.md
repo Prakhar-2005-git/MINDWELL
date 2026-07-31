@@ -44,14 +44,24 @@ authTag: "<hexadecimal text>"
 
 The distinctive plaintext must not appear in the database screenshot. Add the image at `docs/privacy-demo/mongodb-encrypted-entry.png` before submitting. Do not include a screenshot containing real user entries or secrets.
 
-## Deploy
+## Deploy free on Vercel
 
-The repository includes `render.yaml` for the Node API and `frontend/vercel.json` for client-side routing.
+The frontend and API deploy together from the repository root on Vercel's free Hobby plan. The API is a serverless function at `/api`, so no Render account or payment method is needed.
 
-1. Push the repository to GitHub. Confirm `backend/.env` is not committed.
-2. In Render, create a Blueprint from the repository. Supply `MONGO_URI`, set `CLIENT_ORIGIN` to the Vercel URL, and keep the generated `JWT_SECRET` and `MASTER_KEY` private.
-3. In Vercel, import the repository, set the Root Directory to `frontend`, and set `REACT_APP_API_URL` to `https://<your-render-service>.onrender.com/api`.
-4. Redeploy the Render service after adding the final Vercel URL to `CLIENT_ORIGIN`. Visit `/api/health` to verify the API.
+1. Create a free MongoDB Atlas M0 cluster and permit connections from Vercel. Copy its connection string into `MONGO_URI`.
+2. In Vercel, import this GitHub repository. Leave **Root Directory** set to `./` (the repository root).
+3. Add these environment variables for Production, Preview, and Development:
+
+   ```text
+   MONGO_URI=<your MongoDB connection string>
+   JWT_SECRET=<random secret of at least 32 characters>
+   MASTER_KEY=<separate random secret of at least 32 characters>
+   CLIENT_ORIGIN=https://<your-vercel-project>.vercel.app
+   ```
+
+4. Deploy. Open `https://<your-vercel-project>.vercel.app/api/health`; it should return `{"status":"ok"}`.
+
+The frontend automatically calls the same deployment at `/api`. Do not add these secrets to GitHub or create a `REACT_APP_API_URL` variable in Vercel.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for more detail.
 

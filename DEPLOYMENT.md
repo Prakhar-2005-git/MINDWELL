@@ -2,7 +2,7 @@
 
 ## Pre-Deployment Checklist
 
-### Backend Setup
+### Backend Setup (local only)
 
 1. **Environment Variables**
    Create `.env` file in `/backend` with:
@@ -204,14 +204,19 @@ curl -X GET http://localhost:5000/api/journal/export \
 
 ## Deployment Platforms
 
-### Option 1: Render + Vercel (recommended)
-1. Create a Render Blueprint from this repository. The included `render.yaml`
-   deploys the `/backend` service and provides a health check at `/api/health`.
-2. Add `MONGO_URI` and `CLIENT_ORIGIN` in Render's environment settings. Keep
-   `JWT_SECRET` and `MASTER_KEY` secret; never put them in a client variable.
-3. Import the repository into Vercel with `frontend` as the Root Directory.
-   Set `REACT_APP_API_URL` to `https://<render-service>.onrender.com/api`.
-4. Set `CLIENT_ORIGIN` in Render to the final Vercel deployment URL and redeploy.
+### Option 1: Vercel + MongoDB Atlas (free, no Render account)
+1. Create a free M0 cluster in MongoDB Atlas. In **Network Access**, allow the
+   Vercel API to connect and create a database user with read/write access.
+2. In Vercel, import this GitHub repository. Keep the **Root Directory** as the
+   repository root; `vercel.json` builds the frontend and exposes the backend
+   as a serverless function.
+3. Add `MONGO_URI`, `JWT_SECRET`, `MASTER_KEY`, and `CLIENT_ORIGIN` in Vercel's
+   Environment Variables settings. Use the final Vercel URL as `CLIENT_ORIGIN`.
+4. Deploy and confirm `https://<project>.vercel.app/api/health` returns
+   `{ "status": "ok" }`.
+
+The frontend and backend share one deployment, so do not configure
+`REACT_APP_API_URL` in Vercel.
 
 ### Option 2: AWS
 - Backend: EC2 or Elastic Beanstalk
