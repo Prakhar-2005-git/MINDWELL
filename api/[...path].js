@@ -16,8 +16,8 @@ const connectOnce = async () => {
   return databaseReady;
 };
 
-// Vercel invokes this function for every /api/* request. The cached promise
-// reuses the MongoDB connection while a serverless instance stays warm.
+// Vercel invokes this catch-all function for every /api/* request. The cached
+// promise reuses the MongoDB connection while a serverless instance stays warm.
 export default async function handler(req, res) {
   const missing = requiredEnvironment.filter((key) => !process.env[key]);
   if (missing.length > 0 || process.env.MASTER_KEY.length < 32) {
