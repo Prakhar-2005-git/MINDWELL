@@ -16,7 +16,7 @@ Never rotate `MASTER_KEY` without first migrating existing journal entries: entr
 
 ## Run locally
 
-Requirements: Node.js 20+ and a MongoDB Atlas database (or local MongoDB).
+Requirements: Node.js 24+ and a MongoDB Atlas database (or local MongoDB).
 
 ```powershell
 Copy-Item backend/.env.example backend/.env
@@ -44,24 +44,29 @@ authTag: "<hexadecimal text>"
 
 The distinctive plaintext must not appear in the database screenshot. Add the image at `docs/privacy-demo/mongodb-encrypted-entry.png` before submitting. Do not include a screenshot containing real user entries or secrets.
 
-## Deploy free on Vercel
+## Deploy the backend on Heroku
 
-The frontend and API deploy together from the repository root on Vercel's free Hobby plan. The API is a serverless function at `/api`, so no Render account or payment method is needed.
+The Express backend is deployed as a Heroku web process from the `backend` directory. Heroku needs a verified account and an appropriate dyno plan.
 
-1. Create a free MongoDB Atlas M0 cluster and permit connections from Vercel. Copy its connection string into `MONGO_URI`.
-2. In Vercel, import this GitHub repository. Leave **Root Directory** set to `./` (the repository root).
-3. Add these environment variables for Production, Preview, and Development:
+1. Create a Heroku app, then add its Git remote from the repository root.
+2. Set these Heroku Config Vars:
 
    ```text
    MONGO_URI=<your MongoDB connection string>
    JWT_SECRET=<random secret of at least 32 characters>
    MASTER_KEY=<separate random secret of at least 32 characters>
-   CLIENT_ORIGIN=https://<your-vercel-project>.vercel.app
+   CLIENT_ORIGIN=https://<your-frontend-domain>
    ```
 
-4. Deploy. Open `https://<your-vercel-project>.vercel.app/api/health`; it should return `{"status":"ok"}`.
+3. Deploy only the backend subtree:
 
-The frontend automatically calls the same deployment at `/api`. Do not add these secrets to GitHub or create a `REACT_APP_API_URL` variable in Vercel.
+   ```powershell
+   git subtree push --prefix backend heroku main
+   ```
+
+4. Open `https://<your-heroku-app>.herokuapp.com/api/health`; it should return `{"status":"ok"}`.
+
+Set `REACT_APP_API_URL=https://<your-heroku-app>.herokuapp.com/api` in the frontend host before building the frontend. Do not add backend secrets to GitHub.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for more detail.
 

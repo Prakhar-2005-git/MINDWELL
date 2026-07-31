@@ -4,8 +4,8 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import journalRoutes from './routes/journal.js';
 
-// Local development reads backend/.env. Vercel provides these values directly
-// through its Environment Variables settings.
+// Local development reads backend/.env. Heroku supplies these values through
+// its Config Vars at runtime.
 dotenv.config();
 
 const app = express();

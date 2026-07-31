@@ -6,13 +6,8 @@
   "dependencies": {
     "autoprefixer": "^10.5.4",
     "axios": "^1.18.1",
-    "bcryptjs": "^2.4.3",
     "chart.js": "^4.5.1",
-    "cors": "^2.8.5",
-    "express": "^4.22.2",
     "framer-motion": "^10.18.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.24.2",
     "postcss": "^8.5.23",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.3.1",
