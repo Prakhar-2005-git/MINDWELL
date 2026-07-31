@@ -1,0 +1,4 @@
+import React, { useState } from 'react';
+const Support = () => { const [sent, setSent] = useState(false); const submit = (event) => { event.preventDefault(); setSent(true); event.currentTarget.reset(); };
+return <section className="support-page"><div><p className="eyebrow">WE’RE HERE TO LISTEN</p><h1>Need a little help?</h1><p>Tell us about a question or issue you are facing. We will help you find the next step.</p></div><form className="support-form" onSubmit={submit}>{sent && <p className="success-message">Thank you — your message has been received.</p>}<label>Name<input required placeholder="Your name" /></label><label>Email<input type="email" required placeholder="you@example.com" /></label><label>What can we help with?<textarea required rows="6" placeholder="Share your question or describe the issue…" /></label><button className="button">Send message</button></form></section>; };
+export default Support;
