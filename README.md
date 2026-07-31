@@ -44,29 +44,25 @@ authTag: "<hexadecimal text>"
 
 The distinctive plaintext must not appear in the database screenshot. Add the image at `docs/privacy-demo/mongodb-encrypted-entry.png` before submitting. Do not include a screenshot containing real user entries or secrets.
 
-## Deploy the backend on Heroku
+## Deploy with Render + Vercel
 
-The Express backend is deployed as a Heroku web process from the `backend` directory. Heroku needs a verified account and an appropriate dyno plan.
+Deploy the Express backend to Render and the React frontend to Vercel.
 
-1. Create a Heroku app, then add its Git remote from the repository root.
-2. Set these Heroku Config Vars:
+1. Create a Render Blueprint from this repository. The included `render.yaml` deploys `/backend` and checks `/api/health`.
+2. Add these Render environment variables:
 
    ```text
    MONGO_URI=<your MongoDB connection string>
    JWT_SECRET=<random secret of at least 32 characters>
    MASTER_KEY=<separate random secret of at least 32 characters>
-   CLIENT_ORIGIN=https://<your-frontend-domain>
+   CLIENT_ORIGIN=https://<your-vercel-project>.vercel.app
    ```
 
-3. Deploy only the backend subtree:
+3. Import this repository into Vercel with `frontend` as the **Root Directory**.
+4. Set `REACT_APP_API_URL=https://<your-render-service>.onrender.com/api` in Vercel, then redeploy.
+5. Open `https://<your-render-service>.onrender.com/api/health`; it should return `{"status":"ok"}`.
 
-   ```powershell
-   git subtree push --prefix backend heroku main
-   ```
-
-4. Open `https://<your-heroku-app>.herokuapp.com/api/health`; it should return `{"status":"ok"}`.
-
-Set `REACT_APP_API_URL=https://<your-heroku-app>.herokuapp.com/api` in the frontend host before building the frontend. Do not add backend secrets to GitHub.
+Do not add backend secrets to GitHub.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for more detail.
 
