@@ -16,7 +16,7 @@ Never rotate `MASTER_KEY` without first migrating existing journal entries: entr
 
 ## Run locally
 
-Requirements: Node.js 24+ and a MongoDB Atlas database (or local MongoDB).
+Requirements: Node.js 20+ and a MongoDB Atlas database (or local MongoDB).
 
 ```powershell
 Copy-Item backend/.env.example backend/.env
@@ -48,7 +48,7 @@ The distinctive plaintext must not appear in the database screenshot. Add the im
 
 Deploy the Express backend to Render and the React frontend to Vercel.
 
-1. Create a Render Blueprint from this repository. The included `render.yaml` deploys `/backend` and checks `/api/health`.
+1. In Render, create a Node **Web Service** from this repository with `backend` as the Root Directory, `npm ci` as the Build Command, `npm start` as the Start Command, and `/api/health` as the Health Check Path. The included `render.yaml` contains the same configuration if you prefer a Blueprint.
 2. Add these Render environment variables:
 
    ```text
@@ -58,9 +58,10 @@ Deploy the Express backend to Render and the React frontend to Vercel.
    CLIENT_ORIGIN=https://<your-vercel-project>.vercel.app
    ```
 
-3. Import this repository into Vercel with `frontend` as the **Root Directory**.
-4. Set `REACT_APP_API_URL=https://<your-render-service>.onrender.com/api` in Vercel, then redeploy.
-5. Open `https://<your-render-service>.onrender.com/api/health`; it should return `{"status":"ok"}`.
+3. Import this repository into Vercel with `frontend` as the **Root Directory**. Use `npm run build` as the Build Command and `build` as the Output Directory.
+4. Set `REACT_APP_API_URL=https://<your-render-service>.onrender.com/api` in Vercel, then redeploy. This must be configured before Vercel builds the React app.
+5. After Vercel provides its public URL, set the matching URL (with no trailing slash) as `CLIENT_ORIGIN` in Render and redeploy the API.
+6. Open `https://<your-render-service>.onrender.com/api/health`; it should return `{"status":"ok"}`.
 
 Do not add backend secrets to GitHub.
 

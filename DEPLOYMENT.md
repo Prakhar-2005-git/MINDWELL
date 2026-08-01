@@ -204,19 +204,21 @@ curl -X GET http://localhost:5000/api/journal/export \
 
 ## Deployment Platforms
 
-### Option 1: Vercel + MongoDB Atlas (free, no Render account)
-1. Create a free M0 cluster in MongoDB Atlas. In **Network Access**, allow the
-   Vercel API to connect and create a database user with read/write access.
-2. In Vercel, import this GitHub repository. Keep the **Root Directory** as the
-   repository root; `vercel.json` builds the frontend and exposes the backend
-   as a serverless function.
-3. Add `MONGO_URI`, `JWT_SECRET`, `MASTER_KEY`, and `CLIENT_ORIGIN` in Vercel's
-   Environment Variables settings. Use the final Vercel URL as `CLIENT_ORIGIN`.
-4. Deploy and confirm `https://<project>.vercel.app/api/health` returns
-   `{ "status": "ok" }`.
-
-The frontend and backend share one deployment, so do not configure
-`REACT_APP_API_URL` in Vercel.
+### Option 1: Render API + Vercel frontend
+1. Create a MongoDB Atlas cluster and database user, then copy its connection
+   string for `MONGO_URI`.
+2. In Render, create a Node **Web Service** with `backend` as the **Root
+   Directory**, `npm ci` as the Build Command, `npm start` as the Start Command,
+   and `/api/health` as the Health Check Path. Add `MONGO_URI`, `JWT_SECRET`,
+   and `MASTER_KEY` as Render environment variables.
+3. In Vercel, import this repository with `frontend` as the **Root Directory**.
+   Set the Build Command to `npm run build` and the Output Directory to `build`.
+4. In Vercel, add `REACT_APP_API_URL` with the value
+   `https://<your-render-service>.onrender.com/api`, then deploy or redeploy.
+5. Set Render's `CLIENT_ORIGIN` to your exact Vercel URL (without a trailing
+   slash), then redeploy the Render service.
+6. Confirm `https://<your-render-service>.onrender.com/api/health` returns
+   `{ "status": "ok" }`, then test registration and login from the Vercel site.
 
 ### Option 2: AWS
 - Backend: EC2 or Elastic Beanstalk
